@@ -8,7 +8,7 @@ class UsuarioModel(Base):
     email = db.Column(db.String(200), unique=True, nullable=False)
     senha = db.Column(db.String(200), nullable=False)
     cargo = db.Column(db.String(200), nullable=False)
-    telefone = db.Column(db.String(200), nullable=False)
+    telefone = db.Column(db.String(200), nullable=True)
     foto = db.Column(db.String(200), nullable=False)
     avaliacao = db.Column(db.Integer, nullable=False)
 
