@@ -1,0 +1,9 @@
+Flask
+Flask-RESTful
+Flask-Cors
+werkzeug
+PyMySQL
+flask-sqlalchemy
+marshmallow
+flask-marshmallow
+marshmallow-sqlalchemy
