@@ -1,7 +1,7 @@
 from dao import db,Base
 
 class AtividadeModel(Base):
-    __tablename__ = 'mensagens'
+    __tablename__ = 'atividades'
     id = db.Column(db.Integer, primary_key=True)
     id_cronograma = db.Column(db.Integer, nullable=False)
     nome = db.Column(db.String(200), nullable=False)

@@ -77,7 +77,7 @@ class MensagemResource(Resource):
         json = ''
         return json, 201
 
-class MensagemsResource(Resource):
+class MensagensResource(Resource):
     def get(self):
         json = ""
         try:
