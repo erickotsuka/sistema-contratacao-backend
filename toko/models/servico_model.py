@@ -4,12 +4,12 @@ class ServicoModel(Base):
     __tablename__ = 'servicos'
     id = db.Column(db.Integer, primary_key=True)
     id_proposta = db.Column(db.Integer, db.ForeignKey('propostas.id'))
-    nome = db.Column(db.String(200))
+    titulo = db.Column(db.String(200))
     descricao = db.Column(db.String(200))
     id_cronograma = db.Column(db.Integer, db.ForeignKey('cronogramas.id'))
 
-    def __init__(self, nome):
-        self.nome = nome
+    def __init__(self, titulo):
+        self.titulo = titulo
 
     def adicionar(self):
         db.session.add(self)
