@@ -11,8 +11,14 @@ class PropostaModel(Base):
     descricao = db.Column(db.String(200))
     status = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, nome):
-        self.nome = nome
+    def __init__(self, id_demanda, prazo, orcamento, id_integrador, titulo, descricao, status):
+        self.id_demanda = id_demanda
+        self.prazo = prazo
+        self.orcamento = orcamento
+        self.id_integrador = id_integrador
+        self.titulo = titulo
+        self.descricao = descricao
+        self.status = status
 
     def adicionar(self):
         db.session.add(self)

@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse, abort
 from flask import request
 from toko.models.proposta_model import PropostaModel
 from toko.schemas.proposta_schema import PropostaSchema
+from datetime import datetime
 
 class PropostaResource(Resource):
     parser = reqparse.RequestParser()
@@ -19,6 +20,11 @@ class PropostaResource(Resource):
                         type=float,
                         required=True,
                         help="O orçamento da Proposta não pode estar em branco."
+                        )
+    parser.add_argument('id_integrador',
+                        type=int,
+                        required=True,
+                        help="O ID do integrador da proposta não pode estar em branco."
                         )
     parser.add_argument('titulo',
                         type=str,
@@ -52,6 +58,22 @@ class PropostaResource(Resource):
 
         return json,200
 
+    def delete(self,titulo):
+        json = []
+        try:
+            proposta = PropostaModel.encontrar_pelo_titulo(tiulo)
+            if proposta:
+                proposta.remover()
+                lista = PropostaModel.listar()
+                schema = PropostaSchema(many=True,exclude=['listas'])
+                json = schema.dump(lista).data
+            else:
+                return {"message":"Proposta {} não está na lista".format(nome)},404
+        except Exception as e:
+            print(e)
+        return json, 201
+
+
     def post(self):
         try:
             data = PropostaResource.parser.parse_args()
@@ -82,6 +104,35 @@ class PropostaResource(Resource):
 
     def put(self):
         json = ''
+        try:
+            data = PropostaResource.parser.parse_args()
+            id_demanda = data['id_demanda']
+            prazo = data['prazo']
+            orcamento = data['orcamento']
+            id_integrador = data['id_integrador']
+            titulo = data['titulo']
+            descricao = data['descricao']
+            status = data['status']
+
+            proposta = PropostaModel.encontrar_pelo_titulo(titulo)
+            if proposta:
+                return {"message":"Proposta {} já está na lista".format(proposta.titulo)},200
+            else:
+                proposta = PropostaModel(
+                    id_demanda=id_demanda,
+                    prazo=prazo,
+                    orcamento=orcamento,
+                    id_integrador=id_integrador,
+                    titulo=titulo,
+                    descricao=descricao,
+                    status=status
+                )
+                proposta.adicionar()
+                schema = PropostaSchema(many=True)
+                proposta = PropostaModel.encontrar_pelo_titulo(titulo)
+                json = schema.dump(proposta).data
+        except Exception as e:
+            print(e)
         return json, 201
 
 class PropostasResource(Resource):

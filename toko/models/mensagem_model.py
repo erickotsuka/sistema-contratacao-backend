@@ -9,8 +9,12 @@ class MensagemModel(Base):
     data_hora = db.Column(db.DateTime, nullable=False)
     conteudo = db.Column(db.String(200), nullable=False)
 
-    def __init__(self, nome):
-        self.nome = nome
+    def __init__(self, id_chat, id_usuario_de, id_usuario_para, data_hora, conteudo):
+        self.id_chat = id_chat
+        self.id_usuario_de = id_usuario_de
+        self.id_usuario_para = id_usuario_para
+        self.data_hora = data_hora
+        self.conteudo = conteudo
 
     def adicionar(self):
         db.session.add(self)

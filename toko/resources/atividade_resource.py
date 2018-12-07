@@ -42,6 +42,21 @@ class AtividadeResource(Resource):
 
         return json,200
 
+    def delete(self,id_cronograma,nome):
+        json = []
+        try:
+            atividade = AtividadeModel.encontrar_pelo_cronograma_e_nome(id_cronograma, nome)
+            if atividade:
+                atividade.remover()
+                lista = AtividadeModel.listar()
+                schema = AtividadeSchema(many=True,exclude=['listas'])
+                json = schema.dump(lista).data
+            else:
+                return {"message":"Atividade {} não está na lista".format(nome)},404
+        except Exception as e:
+            print(e)
+        return json, 201
+
     def post(self):
         try:
             data = AtividadeResource.parser.parse_args()
@@ -69,13 +84,36 @@ class AtividadeResource(Resource):
 
     def put(self):
         json = ''
+        try:
+            data = AtividadeResource.parser.parse_args()
+            id_cronograma = data['id_cronograma']
+            nome = data['nome']
+            entrega = data['entrega']
+            descricao = data['descricao']
+
+            atividade = AtividadeModel.encontrar_pelo_cronograma_e_nome(id_cronograma, nome)
+            if atividade:
+                return {"message":"Atividade {} já está na lista".format(atividade.nome)},200
+            else:
+                atividade = AtividadeModel(
+                    id_cronograma=id_cronograma,
+                    nome=nome,
+                    entrega=entrega,
+                    descricao=descricao
+                )
+                atividade.adicionar()
+                schema = AtividadeSchema(many=True)
+                atividade = AtividadeModel.encontrar_pelo_cronograma_e_nome(id_cronograma, nome)
+                json = schema.dump(atividade).data
+        except Exception as e:
+            print(e)
         return json, 201
 
 class AtividadesResource(Resource):
-    def get(self):
+    def get(self, id_cronograma):
         json = ""
         try:
-            atividades = AtividadeModel.listar()
+            atividades = AtividadeModel.listar_pelo_id_cronograma(id_cronograma)
             schema = AtividadeSchema(many=True)
             json = schema.dump(atividades).data
         except Exception as e:

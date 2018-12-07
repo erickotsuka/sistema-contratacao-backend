@@ -47,6 +47,22 @@ class MensagemResource(Resource):
 
         return json,200
 
+    def delete(self,id):
+        json = []
+        try:
+            mensagem = MensagemModel.encontrar_pelo_id(id)
+            if mensagem:
+                mensagem.remover()
+                lista = MensagemModel.listar()
+                schema = MensagemSchema(many=True,exclude=['listas'])
+                json = schema.dump(lista).data
+            else:
+                return {"message":"Mensagem {} não está na lista".format(nome)},404
+        except Exception as e:
+            print(e)
+        return json, 201
+
+
     def post(self):
         try:
             data = MensagemResource.parser.parse_args()
@@ -75,6 +91,27 @@ class MensagemResource(Resource):
 
     def put(self):
         json = ''
+        try:
+            data = MensagemResource.parser.parse_args()
+            id_chat = data['id_chat']
+            id_usuario_de = data['id_usuario_de']
+            id_usuario_para = data['id_usuario_para']
+            data_hora = data['data_hora']
+            conteudo = data['conteudo']
+
+            mensagem = MensagemModel(
+                id_chat=id_chat,
+                id_usuario_de=id_usuario_de,
+                id_usuario_para=id_usuario_para,
+                data_hora=data_hora,
+                conteudo=conteudo
+            )
+            mensagem.adicionar()
+            schema = MensagemSchema(many=True)
+            # mensagem = MensagemModel.encontrar_pelo_id(id)
+            json = schema.dump(mensagem).data
+        except Exception as e:
+            print(e)
         return json, 201
 
 class MensagensResource(Resource):

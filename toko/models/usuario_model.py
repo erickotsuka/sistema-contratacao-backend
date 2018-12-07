@@ -12,8 +12,15 @@ class UsuarioModel(Base):
     foto = db.Column(db.String(200), nullable=False)
     avaliacao = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, nome):
+    def __init__(self, tipoUsuario, nome, email, senha, cargo, telefone, foto, avaliacao):
+        self.tipoUsuario = tipoUsuario
         self.nome = nome
+        self.email = email
+        self.senha = senha
+        self.cargo = cargo
+        self.telefone = telefone
+        self.foto = foto
+        self.avaliacao = avaliacao
 
     def adicionar(self):
         db.session.add(self)

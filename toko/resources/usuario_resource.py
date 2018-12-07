@@ -62,6 +62,21 @@ class UsuarioResource(Resource):
 
         return json,200
 
+    def delete(self,nome):
+        json = []
+        try:
+            usuario = UsuarioModel.encontrar_pelo_nome(nome)
+            if usuario:
+                usuario.remover()
+                lista = UsuarioModel.listar()
+                schema = UsuarioSchema(many=True,exclude=['listas'])
+                json = schema.dump(lista).data
+            else:
+                return {"message":"Usuario {} não está na lista".format(nome)},404
+        except Exception as e:
+            print(e)
+        return json, 201
+
     def post(self):
         try:
             data = UsuarioResource.parser.parse_args()
@@ -71,8 +86,8 @@ class UsuarioResource(Resource):
             if UsuarioModel.encontrar_pelo_nome(data['nome']):
                 return {"message": "Usuário ja existe"}, 400
             else:
-                usuario = UsuarioModel(data['nome'],
-                                       data['tipoUsuario'],
+                usuario = UsuarioModel(data['tipoUsuario'],
+                                       data['nome'],
                                        data['email'],
                                        data['senha'],
                                        data['cargo'],
@@ -89,10 +104,41 @@ class UsuarioResource(Resource):
 
         except Exception as ex:
             print(ex)
-            return {"message": "erro"}, 500
+            return {"message": str(ex)}, 500
 
     def put(self):
         json = ''
+        try:
+            data = UsuarioResource.parser.parse_args()
+            tipoUsuario = data['tipoUsuario']
+            nome = data['nome']
+            email = data['email']
+            senha = data['senha']
+            cargo = data['cargo']
+            telefone = data['telefone']
+            foto = data['foto']
+            avaliacao = data['avaliacao']
+
+            usuario = UsuarioModel.encontrar_pelo_nome(nome)
+            if usuario:
+                return {"message":"Usuario {} já está na lista".format(usuario.nome)},200
+            else:
+                usuario = UsuarioModel(
+                    tipoUsuario=tipoUsuario,
+                    nome=nome,
+                    email=email,
+                    senha=senha,
+                    cargo=cargo,
+                    telefone=telefone,
+                    foto=foto,
+                    avaliacao=avaliacao
+                )
+                usuario.adicionar()
+                schema = UsuarioSchema(many=True)
+                usuario = UsuarioModel.encontrar_pelo_nome(nome)
+                json = schema.dump(usuario).data
+        except Exception as e:
+            print(e)
         return json, 201
 
 class UsuariosResource(Resource):

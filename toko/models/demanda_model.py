@@ -8,8 +8,11 @@ class DemandaModel(Base):
     data_limite = db.Column(db.DateTime, nullable=False)
     descricao = db.Column(db.String(200))
 
-    def __init__(self, nome):
-        self.nome = nome
+    def __init__(self, id_cliente, titulo, data_limite, descricao):
+        self.id_cliente = id_cliente
+        self.titulo = titulo
+        self.data_limite = data_limite
+        self.descricao =  descricao
 
     def adicionar(self):
         db.session.add(self)

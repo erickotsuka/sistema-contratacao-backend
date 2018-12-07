@@ -6,10 +6,13 @@ class ServicoModel(Base):
     id_proposta = db.Column(db.Integer, db.ForeignKey('propostas.id'))
     titulo = db.Column(db.String(200))
     descricao = db.Column(db.String(200))
-    id_cronograma = db.Column(db.Integer, db.ForeignKey('cronogramas.id'))
+    id_cronograma = db.Column(db.Integer)
 
-    def __init__(self, titulo):
+    def __init__(self, id_proposta, titulo, descricao, id_cronograma):
+        self.id_proposta = id_proposta
         self.titulo = titulo
+        self.descricao = descricao
+        self.id_cronograma = id_cronograma
 
     def adicionar(self):
         db.session.add(self)
@@ -21,7 +24,7 @@ class ServicoModel(Base):
 
     @classmethod
     def encontrar_pelo_titulo(cls, titulo):
-        return cls.query.filter_by(titulo=titulo).all()
+        return cls.query.filter_by(titulo=titulo).first()
 
     @classmethod
     def listar(cls):
