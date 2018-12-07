@@ -24,7 +24,7 @@ class AtividadeModel(Base):
 
     @classmethod
     def encontrar_pelo_cronograma_e_nome(cls, _id_cronograma, _nome):
-        return cls.query.filter_by(id_cronograma=_id_cronograma).filter_by(nome=_nome)
+        return cls.query.filter_by(id_cronograma=_id_cronograma, nome=_nome).first()
 
     @classmethod
     def lista_pelo_id_cronograma(cls, _id_cronograma):

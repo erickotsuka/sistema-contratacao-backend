@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse, abort
 from flask import request
 from toko.models.atividade_model import AtividadeModel
 from toko.schemas.atividade_schema import AtividadeSchema
+from datetime import datetime
 
 class AtividadeResource(Resource):
     parser = reqparse.RequestParser()
@@ -42,17 +43,17 @@ class AtividadeResource(Resource):
 
         return json,200
 
-    def delete(self,id_cronograma,nome):
+    def delete(self,id):
         json = []
         try:
-            atividade = AtividadeModel.encontrar_pelo_cronograma_e_nome(id_cronograma, nome)
+            atividade = AtividadeModel.encontrar_pelo_id(id)
             if atividade:
                 atividade.remover()
                 lista = AtividadeModel.listar()
                 schema = AtividadeSchema(many=True,exclude=['listas'])
                 json = schema.dump(lista).data
             else:
-                return {"message":"Atividade {} não está na lista".format(nome)},404
+                return {"message":"Atividade {} não está na lista".format(id)},404
         except Exception as e:
             print(e)
         return json, 201
@@ -110,10 +111,10 @@ class AtividadeResource(Resource):
         return json, 201
 
 class AtividadesResource(Resource):
-    def get(self, id_cronograma):
+    def get(self):
         json = ""
         try:
-            atividades = AtividadeModel.listar_pelo_id_cronograma(id_cronograma)
+            atividades = AtividadeModel.listar()
             schema = AtividadeSchema(many=True)
             json = schema.dump(atividades).data
         except Exception as e:

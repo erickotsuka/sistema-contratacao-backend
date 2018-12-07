@@ -29,22 +29,22 @@ def create_tables():
 #fim criacao de tabelas
 
 api.add_resource(AtividadesResource, '/atividades')
-api.add_resource(AtividadeResource, '/atividade', '/atividade/<string:nome>')
+api.add_resource(AtividadeResource, '/atividade', '/atividade/<int:id>')
 
 api.add_resource(DemandasResource, '/demandas')
-api.add_resource(DemandaResource, '/demanda','/demanda/<string:titulo>')
+api.add_resource(DemandaResource, '/demanda','/demanda/<int:id>')
 
 api.add_resource(MensagensResource, '/mensagens')
-api.add_resource(MensagemResource, '/mensagem','/mensagem/<string:id>')
+api.add_resource(MensagemResource, '/mensagem','/mensagem/<int:id>')
 
 api.add_resource(PropostasResource, '/propostas')
-api.add_resource(PropostaResource, '/proposta','/proposta/<string:titulo>')
+api.add_resource(PropostaResource, '/proposta','/proposta/<int:id>')
 
 api.add_resource(ServicosResource, '/servicos')
-api.add_resource(ServicoResource, '/servico','/servico/<string:titulo>')
+api.add_resource(ServicoResource, '/servico','/servico/<int:id>')
 
 api.add_resource(UsuariosResource, '/usuarios')
-api.add_resource(UsuarioResource,'/usuario','/usuario/<string:nome>')
+api.add_resource(UsuarioResource,'/usuario','/usuario/<int:id>')
 
 if __name__ == '__main__':
     from dao import db

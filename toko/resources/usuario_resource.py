@@ -46,33 +46,33 @@ class UsuarioResource(Resource):
                         help="A avaliação do usuário é  opcional."
                         )
 
-    def get(self,nome):
+    def get(self,id):
         json = ''
         try:
-            usuario = UsuarioModel.encontrar_pelo_nome(nome)
+            usuario = UsuarioModel.encontrar_pelo_id(id)
             print(usuario)
             if usuario:
                 schema = UsuarioSchema()
                 json = schema.dump(usuario).data
             else:
-                return {"message":"Usuario {} não existe".format(nome)},404
+                return {"message":"Usuario {} não existe".format(id)},404
         except Exception as e:
             print(e)
-            return {"message","Erro na requisição".format(nome)},500
+            return {"message","Erro na requisição".format(id)},500
 
         return json,200
 
-    def delete(self,nome):
+    def delete(self,id):
         json = []
         try:
-            usuario = UsuarioModel.encontrar_pelo_nome(nome)
+            usuario = UsuarioModel.encontrar_pelo_id(id)
             if usuario:
                 usuario.remover()
                 lista = UsuarioModel.listar()
                 schema = UsuarioSchema(many=True,exclude=['listas'])
                 json = schema.dump(lista).data
             else:
-                return {"message":"Usuario {} não está na lista".format(nome)},404
+                return {"message":"Usuario {} não está na lista".format(id)},404
         except Exception as e:
             print(e)
         return json, 201

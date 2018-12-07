@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse, abort
 from flask import request
 from toko.models.mensagem_model import MensagemModel
 from toko.schemas.mensagem_schema import MensagemSchema
+from datetime import datetime
 
 class MensagemResource(Resource):
     parser = reqparse.RequestParser()
@@ -31,19 +32,19 @@ class MensagemResource(Resource):
                         help="O conteúdo da Mensagem não pode estar em branco."
                         )
 
-    def get(self,id_chat):
+    def get(self,id):
         json = ''
         try:
-            mensagem = MensagemModel.encontrar_pelo_id_chat(id_chat)
+            mensagem = MensagemModel.encontrar_pelo_id(id)
             print(mensagem)
             if mensagem:
                 schema = MensagemSchema()
                 json = schema.dump(mensagem).data
             else:
-                return {"message":"Mensagem {} não existe".format(id_chat)},404
+                return {"message":"Mensagem {} não existe".format(id)},404
         except Exception as e:
             print(e)
-            return {"message","Erro na requisição".format(id_chat)},500
+            return {"message","Erro na requisição".format(id)},500
 
         return json,200
 
@@ -57,7 +58,7 @@ class MensagemResource(Resource):
                 schema = MensagemSchema(many=True,exclude=['listas'])
                 json = schema.dump(lista).data
             else:
-                return {"message":"Mensagem {} não está na lista".format(nome)},404
+                return {"message":"Mensagem {} não está na lista".format(id)},404
         except Exception as e:
             print(e)
         return json, 201

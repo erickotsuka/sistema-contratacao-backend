@@ -26,33 +26,33 @@ class ServicoResource(Resource):
                         help="O cronograma do Servico não pode estar em branco."
                         )
 
-    def get(self,titulo):
+    def get(self,id):
         json = ''
         try:
-            servico = ServicoModel.encontrar_pelo_titulo(titulo)
+            servico = ServicoModel.encontrar_pelo_id(id)
             print(servico)
             if servico:
                 schema = ServicoSchema()
                 json = schema.dump(servico).data
             else:
-                return {"message":"Servico {} não existe".format(titulo)},404
+                return {"message":"Servico {} não existe".format(id)},404
         except Exception as e:
             print(e)
-            return {"message","Erro na requisição".format(titulo)},500
+            return {"message","Erro na requisição".format(id)},500
 
         return json,200
 
-    def delete(self,titulo):
+    def delete(self,id):
         json = []
         try:
-            servico = ServicoModel.encontrar_pelo_titulo(tiulo)
+            servico = ServicoModel.encontrar_pelo_id(id)
             if servico:
                 servico.remover()
                 lista = ServicoModel.listar()
                 schema = ServicoSchema(many=True,exclude=['listas'])
                 json = schema.dump(lista).data
             else:
-                return {"message":"Servico {} não está na lista".format(nome)},404
+                return {"message":"Servico {} não está na lista".format(id)},404
         except Exception as e:
             print(e)
         return json, 201

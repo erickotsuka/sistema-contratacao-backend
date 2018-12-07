@@ -42,33 +42,33 @@ class PropostaResource(Resource):
                         help="O status da Proposta não pode estar em branco."
                         )
 
-    def get(self,titulo):
+    def get(self,id):
         json = ''
         try:
-            proposta = PropostaModel.encontrar_pelo_titulo(titulo)
+            proposta = PropostaModel.encontrar_pelo_id(id)
             print(proposta)
             if proposta:
                 schema = PropostaSchema()
                 json = schema.dump(proposta).data
             else:
-                return {"message":"Proposta {} não existe".format(titulo)},404
+                return {"message":"Proposta {} não existe".format(id)},404
         except Exception as e:
             print(e)
-            return {"message","Erro na requisição".format(titulo)},500
+            return {"message","Erro na requisição".format(id)},500
 
         return json,200
 
-    def delete(self,titulo):
+    def delete(self,id):
         json = []
         try:
-            proposta = PropostaModel.encontrar_pelo_titulo(tiulo)
+            proposta = PropostaModel.encontrar_pelo_id(id)
             if proposta:
                 proposta.remover()
                 lista = PropostaModel.listar()
                 schema = PropostaSchema(many=True,exclude=['listas'])
                 json = schema.dump(lista).data
             else:
-                return {"message":"Proposta {} não está na lista".format(nome)},404
+                return {"message":"Proposta {} não está na lista".format(id)},404
         except Exception as e:
             print(e)
         return json, 201
