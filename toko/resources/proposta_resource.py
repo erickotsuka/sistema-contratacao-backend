@@ -139,7 +139,11 @@ class PropostasResource(Resource):
     def get(self):
         json = ""
         try:
-            propostas = PropostaModel.listar()
+            if request.args:
+                if request.args['id_demanda']:
+                    propostas = PropostaModel.listar_pela_demanda(request.args['id_demanda'])
+            else:
+                propostas = PropostaModel.listar()
             schema = PropostaSchema(many=True)
             json = schema.dump(propostas).data
         except Exception as e:

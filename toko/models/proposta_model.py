@@ -29,8 +29,12 @@ class PropostaModel(Base):
         return cls.query.filter_by(id=_id).first()
 
     @classmethod
-    def encontrar_pelo_titulo(cls, titulo):
-        return cls.query.filter_by(titulo=titulo).all()
+    def encontrar_pelo_titulo(cls, _titulo):
+        return cls.query.filter_by(titulo=_titulo).all()
+
+    @classmethod
+    def listar_pela_demanda(cls, _id_demanda):
+        return cls.query.filter_by(id_demanda=_id_demanda).all()
 
     @classmethod
     def listar(cls):
