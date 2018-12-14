@@ -16,9 +16,14 @@ class DemandaResource(Resource):
                         required=True,
                         help="O título da demanda não pode estar em branco."
                         )
+    parser.add_argument("tipo_servico",
+                        type=str,
+                        required=True,
+                        help="O tipo de serviço da demanda não pode estar em branco."
+                        )
     parser.add_argument("data_limite",
                         type=lambda x: datetime.strptime(x,'%Y-%m-%dT%H:%M:%S'),
-                        required=True,
+                        required=False,
                         help="Data limite da demanda não pode estar em branco."
                         )
     parser.add_argument('descricao',
@@ -69,6 +74,7 @@ class DemandaResource(Resource):
             else:
                 demanda = DemandaModel(data['id_cliente'],
                                        data['titulo'],
+                                       data['tipo_servico'],
                                        data['data_limite'],
                                        data['descricao']
                                        )
@@ -89,6 +95,7 @@ class DemandaResource(Resource):
             data = DemandaResource.parser.parse_args()
             id_cliente = data['id_cliente']
             titulo = data['titulo']
+            tipo_servico = data['tipo_servico']
             data_limite = data['data_limite']
             descricao = data['descricao']
 
@@ -99,6 +106,7 @@ class DemandaResource(Resource):
                 demanda = DemandaModel(
                     id_cliente=id_cliente,
                     titulo=titulo,
+                    tipo_servico=tipo_servico,
                     data_limite=data_limite,
                     descricao=descricao
                 )
